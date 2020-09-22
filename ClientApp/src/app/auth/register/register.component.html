@@ -1,0 +1,6 @@
+<p>register works!</p>
+<input #email type="email" />
+<input #password type="password" />
+<input #repeatedPassword type="password" />
+<p style="color:red">{{errorMessage}}</p>
+<button (click)="register(email.value, password.value, repeatedPassword.value)">Register</button>

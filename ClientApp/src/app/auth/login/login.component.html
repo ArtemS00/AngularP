@@ -1,0 +1,5 @@
+<p>login works!</p>
+<input #email type="email"/>
+<input #password type="password"/>
+<p style="color:red">{{errorMessage}}</p>
+<button (click)="login(email.value, password.value)">Login</button>

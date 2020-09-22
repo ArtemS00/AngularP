@@ -1,0 +1,97 @@
+<div style="width: 90%;min-width:950px; margin-left: 5%">
+  <form class="form-inline" style="margin-bottom: 20px">
+    <div class="input-group" style="margin-right: 15px">
+      <div class="input-group-prepend">
+        <span class="input-group-text" style="background-color:#e6faff">What</span>
+      </div>
+      <input #description
+             type="text" class="form-control"
+             placeholder="Job description..." style="width: 400px">
+    </div>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" style="background-color:#e6faff">Where</span>
+      </div>
+      <input #location
+             type="text" class="form-control"
+             placeholder="Location..." style="width: 300px">
+    </div>
+    <button (click)="search(description.value, location.value)"
+            class="btn btn-primary"
+            style="margin-left: 15px; width: 80px">Search</button>
+  </form>
+  <div class="dropdown" style="display:inline-block; margin-right: 5px">
+    <button #jobTypeSelector
+            class="btn btn-primary dropdown-toggle" type="button" id="jobTypeSelector"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Job type
+    </button>
+    <div class="dropdown-menu" aria-labelledby="jobTypeSelector">
+      <a *ngFor="let jobType of jobTypes"
+         (click)="selectedJobType = jobType; onClick(jobTypeSelector.id, jobTypeButton.id, jobTypeText.id, jobType);"
+         class="dropdown-item">
+        {{ jobType }}
+      </a>
+    </div>
+    <button #jobTypeButton
+            id="jobTypeButton" type="button" class="btn btn-primary" hidden>
+      <p #jobTypeText
+         id="jobTypeText" style="display:inline-block; margin: 0 5px 0 0">
+        JobType
+      </p>
+      <span style="font-weight: 700; font-size: 16px; margin: 0"
+            (click)="selectedJobType = null; onDelete(jobTypeSelector.id, jobTypeButton.id);">
+        &times;
+      </span>
+    </button>
+  </div>
+  <div class="dropdown" style="display:inline-block; margin-right: 5px">
+    <button #expLevelSelector
+            class="btn btn-primary dropdown-toggle" type="button" id="expLevelSelector"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Experience level
+    </button>
+    <div class="dropdown-menu" aria-labelledby="expLevelSelector">
+      <a *ngFor="let expLevel of expLevels"
+         (click)="selectedExpLevel = expLevel; onClick(expLevelSelector.id, expLevelButton.id, expLevelText.id, expLevel);"
+         class="dropdown-item">
+        {{ expLevel }}
+      </a>
+    </div>
+    <button #expLevelButton
+            id="expLevelButton" type="button" class="btn btn-primary" hidden>
+      <p #expLevelText
+         id="expLevelText" style="display:inline-block; margin: 0 5px 0 0">
+        ExpLevel
+      </p>
+      <span style="font-weight: 700; font-size: 16px; margin: 0"
+            (click)="selectedExpLevel = null; onDelete(expLevelSelector.id, expLevelButton.id);">
+        &times;
+      </span>
+    </button>
+  </div>
+</div>
+<hr />
+<div style="margin-left: 5%; width: 90%; min-width:950px;" *ngIf="jobsForShow.length > 0">
+  <div *ngIf="pageNumbers.length > 1"
+       class="btn-toolbar" style="margin-bottom: 20px">
+    <button (click)="previousPage()"
+            class="btn btn-secondary" style="margin-right: 8px">< Previous</button>
+    <div class="btn-group mr-2" aria-label="First group">
+      <button *ngFor="let page of pageNumbers"
+              (click)="onPageChange(page)"
+              [class.active]="page == pageNumber"
+              type="button" class="btn btn-secondary pageButtons">{{ page }}</button>
+    </div>
+    <button (click)="nextPage()"
+            class="btn btn-secondary">Next ></button>
+  </div>
+  <div class="row">
+    <app-job *ngFor="let job of jobsForShow"
+             [job]="job"
+             class="col-sm-6" style="margin-bottom:10px">
+    </app-job>
+  </div>
+</div>
+
+
