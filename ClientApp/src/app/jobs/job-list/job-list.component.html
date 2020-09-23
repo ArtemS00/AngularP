@@ -1,0 +1,181 @@
+<div style="width: 90%;min-width:900px; margin-left: 5%; margin-bottom: 20px">
+  <form class="form-inline" style="margin-bottom: 20px">
+    <div class="input-group" style="margin-right: 15px; width: 350px">
+      <div class="input-group-prepend">
+        <span class="input-group-text" style="background-color:#e6faff">What</span>
+      </div>
+      <input #description
+             type="text" class="form-control"
+             placeholder="Job description...">
+    </div>
+    <div class="input-group" style="width: 350px">
+      <div class="input-group-prepend">
+        <span class="input-group-text" style="background-color: #e6faff">Where</span>
+      </div>
+      <input #location
+             type="text" class="form-control"
+             placeholder="Location...">
+    </div>
+    <button (click)="search(description.value, location.value)"
+            class="btn btn-primary"
+            style="margin-left: 15px; width: 80px;">
+      Search
+    </button>
+  </form>
+  <div class="dropdown" style="display:inline-block; margin-right: 5px">
+    <button #datePostedSelector
+            class="btn btn-primary dropdown-toggle" type="button" id="datePostedSelector"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Date Posted
+    </button>
+    <div class="dropdown-menu" aria-labelledby="datePostedSelector">
+      <a *ngFor="let datePosted of datesPosted"
+         (click)="selectedDatePosted = datePosted; onClick(datePostedSelector.id, datePostedButton.id);"
+         class="dropdown-item">
+        {{ datePosted }}
+      </a>
+    </div>
+    <button #datePostedButton
+            id="datePostedButton" type="button" class="btn btn-primary" hidden>
+      <p style="display:inline-block; margin: 0 5px 0 0">
+        {{ selectedDatePosted }}
+      </p>
+      <span style="font-weight: 700; font-size: 16px; margin: 0"
+            (click)="selectedDatePosted = null; onDelete(datePostedSelector.id, datePostedButton.id);">
+        &times;
+      </span>
+    </button>
+  </div>
+  <div class="dropdown" style="display:inline-block; margin-right: 5px">
+    <button #jobTypeSelector
+            class="btn btn-primary dropdown-toggle" type="button" id="jobTypeSelector"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Job type
+    </button>
+    <div class="dropdown-menu" aria-labelledby="jobTypeSelector">
+      <a *ngFor="let jobType of jobTypes"
+         (click)="selectedJobType = jobType; onClick(jobTypeSelector.id, jobTypeButton.id);"
+         class="dropdown-item">
+        {{ jobType }}
+      </a>
+    </div>
+    <button #jobTypeButton
+            id="jobTypeButton" type="button" class="btn btn-primary" hidden>
+      <p style="display:inline-block; margin: 0 5px 0 0">
+        {{ selectedJobType }}
+      </p>
+      <span style="font-weight: 700; font-size: 16px; margin: 0"
+            (click)="selectedJobType = null; onDelete(jobTypeSelector.id, jobTypeButton.id);">
+        &times;
+      </span>
+    </button>
+  </div>
+  <div class="dropdown" style="display:inline-block; margin-right: 5px">
+    <button #expLevelSelector
+            class="btn btn-primary dropdown-toggle" type="button" id="expLevelSelector"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Experience level
+    </button>
+    <div class="dropdown-menu" aria-labelledby="expLevelSelector">
+      <a *ngFor="let expLevel of expLevels"
+         (click)="selectedExpLevel = expLevel; onClick(expLevelSelector.id, expLevelButton.id);"
+         class="dropdown-item">
+        {{ expLevel }}
+      </a>
+    </div>
+    <button #expLevelButton
+            id="expLevelButton" type="button" class="btn btn-primary" hidden>
+      <p style="display:inline-block; margin: 0 5px 0 0">
+        {{ selectedExpLevel }}
+      </p>
+      <span style="font-weight: 700; font-size: 16px; margin: 0"
+            (click)="selectedExpLevel = null; onDelete(expLevelSelector.id, expLevelButton.id);">
+        &times;
+      </span>
+    </button>
+  </div>
+  <div class="dropdown" style="display:inline-block; margin-right: 5px">
+    <button #remoteSelector
+            class="btn btn-primary dropdown-toggle" type="button" id="remoteSelector"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Remote
+    </button>
+    <div class="dropdown-menu" aria-labelledby="remoteSelector">
+      <a (click)="isRemote = true; onClick(remoteSelector.id, remoteButton.id);"
+         class="dropdown-item">
+        Remote
+      </a>
+    </div>
+    <button #remoteButton
+            id="remoteButton" type="button" class="btn btn-primary" hidden>
+      <p style="display:inline-block; margin: 0 5px 0 0">
+        Remote
+      </p>
+      <span style="font-weight: 700; font-size: 16px; margin: 0"
+            (click)="isRemote = false; onDelete(remoteSelector.id, remoteButton.id);">
+        &times;
+      </span>
+    </button>
+  </div>
+  <div class="dropdown" style="display:inline-block; margin-right: 5px">
+    <button #salaryPicker
+            class="btn btn-primary dropdown-toggle" type="button" id="salaryPicker"
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      {{ salaryString }}
+    </button>
+    <div #salarySliderDiv id="salarySliderDiv"
+         class="dropdown-menu" aria-labelledby="salaryPicker">
+      <form>
+        <div class="dropdown-item selectOption">
+          <p style="color:black !important">What’s your desired salary per hour?</p>
+          <mat-slider name="salarySlider"
+                      [color]="red"
+                      [min]="1" [max]="100"
+                      [thumbLabel]="true"
+                      [displayWith]="formatSliderLabel"
+                      [(ngModel)]="salarySliderValue"
+                      style="margin: 5px 10% 0 10%; width:80%;"></mat-slider>
+          <br />
+          <button (click)="salaryFilterEnabled=false; salaryChanged(); closeDropdownElement(salarySliderDiv.id);"
+                  class="btn btn-light">
+            Reset
+          </button>
+          <button (click)="salaryFilterEnabled=true; salaryChanged(); closeDropdownElement(salarySliderDiv.id);"
+                  class="btn btn-light" style="float:right">
+            Apply
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div style="margin-left: 5%; width: 90%; min-width:950px;" *ngIf="jobsForShow.length > 0">
+  <div class="row">
+    <app-job *ngFor="let job of jobsForShow"
+             [job]="job"
+             class="col-sm-6" style="margin-bottom:10px">
+    </app-job>
+  </div>
+  <div *ngIf="pageNumbers.length > 1"
+       class="btn-toolbar" style="margin: 20px 0 20px 0">
+    <button (click)="previousPage()"
+            class="btn btn-secondary" style="margin-right: 8px">
+      &#11207;
+    </button>
+    <div class="btn-group mr-2" aria-label="First group">
+      <button *ngFor="let page of pageNumbers"
+              (click)="onPageChange(page)"
+              [class.active]="page == pageNumber"
+              type="button" class="btn btn-secondary pageButtons">
+        {{ page
+        }}
+</button>
+    </div>
+    <button (click)="nextPage()"
+            class="btn btn-secondary">
+      &#11208;
+    </button>
+  </div>
+</div>
+
+

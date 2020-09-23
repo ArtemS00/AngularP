@@ -14,8 +14,10 @@ import { environment } from '../environments/environment.prod';
 import { JwtModule } from '@auth0/angular-jwt'
 import { ACCESS_TOKEN_KEY } from './services/auth-service';
 import { JwtInterceptor } from './services/jwt-interceptor';
-import { JobsComponent } from './jobs/jobs.component';
-import { JobComponent } from './job/job.component';
+import { JobListComponent } from './jobs/job-list/job-list.component';
+import { JobItemComponent } from './jobs/job-item/job-item.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSliderModule } from '@angular/material/slider';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
@@ -28,8 +30,8 @@ export function tokenGetter() {
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    JobsComponent,
-    JobComponent
+    JobListComponent,
+    JobItemComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -37,16 +39,19 @@ export function tokenGetter() {
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'jobs', component: JobsComponent },
+      { path: 'jobs', component: JobListComponent },
       { path: 'login', component: LoginComponent },
       { path: 'register', component: RegisterComponent },
     ]),
+    MatSliderModule,
 
     JwtModule.forRoot({
       config: {
         tokenGetter
       }
-    })
+    }),
+
+    BrowserAnimationsModule
   ],
   providers: [
     {

@@ -1,0 +1,23 @@
+<div class="card">
+  <div class="card-header" style="background-color:#e6faff">
+    <p style="font-size: 18px; font-weight: 700; margin: 0;"
+       class="overflowtext">
+      {{ job.title }}
+    </p>
+    <p style="margin:0"
+       class="overflowtext">{{ job.location }}</p>
+  </div>
+  <div class="card-body">
+    <p [ngStyle]="{'color': salarySpecified ? 'inherit' : 'grey'}"
+       class="card-text"
+       style="font-weight: 600;">
+      {{ salaryDescription }}
+    </p>
+    <p class="card-text">
+      {{ job.description }}
+    </p>
+    <p style="font-size: 12px; color: grey; margin: 0">
+      {{ datePostedString }}
+    </p>
+  </div>
+</div>
