@@ -13,6 +13,7 @@ export class JobItemComponent {
   salaryDescription: string;
   salarySpecified: boolean = true;
   datePostedString: string;
+  description: string;
 
   ngOnChanges(changes: SimpleChanges) {
     this.salaryDescription = this.job.getSalaryDescription();
@@ -21,5 +22,6 @@ export class JobItemComponent {
       this.salaryDescription = "Not Specified";
     }
     this.datePostedString = this.job.getDatePosted();
+    this.description = this.job.getShortDescription(200);
   }
 }
