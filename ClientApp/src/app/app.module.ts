@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -18,6 +18,11 @@ import { JobListComponent } from './jobs/job-list/job-list.component';
 import { JobItemComponent } from './jobs/job-item/job-item.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
 
 export function tokenGetter() {
   return localStorage.getItem(ACCESS_TOKEN_KEY);
@@ -37,6 +42,7 @@ export function tokenGetter() {
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
+    ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'jobs', component: JobListComponent },
@@ -44,7 +50,11 @@ export function tokenGetter() {
       { path: 'register', component: RegisterComponent },
     ]),
     MatSliderModule,
-
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    MatSelectModule,
     JwtModule.forRoot({
       config: {
         tokenGetter

@@ -21,7 +21,7 @@ namespace AngularP.Controllers
                 Id = Guid.Parse("a524616a-4113-672a-4cdd-1dc552ac0399"),
                 Email = "user@gmail.com",
                 Password = "user",
-                Roles = new Role[] { Role.User }
+                Role = Role.JobSeeker
             }
         };
         private IOptions<AuthOptions> _authOptions;
@@ -33,7 +33,6 @@ namespace AngularP.Controllers
 
         [Route("login")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Login([FromBody]LoginModel loginModel)
         {
             var user = AuthenticateUser(loginModel.Email, loginModel.Password);
@@ -43,7 +42,8 @@ namespace AngularP.Controllers
                 var token = GenerateJWT(user);
                 return Ok(new
                 {
-                    access_token = token
+                    access_token = token,
+                    role = user.Role
                 });
             }
 
@@ -52,10 +52,9 @@ namespace AngularP.Controllers
 
         [Route("register")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Register([FromBody]RegisterModel registerModel)
         {
-            var isSuccess = RegisterUser(registerModel.Email, registerModel.Password);
+            var isSuccess = RegisterUser(registerModel.Email, registerModel.Password, registerModel.Role);
             if (!isSuccess)
                 return Unauthorized();
 
@@ -88,7 +87,7 @@ namespace AngularP.Controllers
             return Ok(new { megadata = "ok!!" });
         }
 
-        private bool RegisterUser(string email, string password)
+        private bool RegisterUser(string email, string password, Role role)
         {
             if (Accounts.Any(a => a.Email == email))
                 return false;
@@ -97,7 +96,7 @@ namespace AngularP.Controllers
             {
                 Email = email,
                 Password = password,
-                Roles = new[] { Role.User }
+                Role = role
             };
             Accounts.Add(account);
 
@@ -123,10 +122,7 @@ namespace AngularP.Controllers
                 new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
             };
 
-            foreach (var role in user.Roles)
-            {
-                claims.Add(new Claim("role", role.ToString()));
-            }
+            claims.Add(new Claim("role", user.Role.ToString()));
 
             var token = new JwtSecurityToken(authParams.Issuer, authParams.Audience, claims, 
                 expires: DateTime.Now.AddSeconds(authParams.TokenLifetime), 

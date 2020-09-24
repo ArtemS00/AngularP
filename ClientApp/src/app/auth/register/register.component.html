@@ -1,6 +1,55 @@
-<p>register works!</p>
-<input #email type="email" />
-<input #password type="password" />
-<input #repeatedPassword type="password" />
-<p style="color:red">{{errorMessage}}</p>
-<button (click)="register(email.value, password.value, repeatedPassword.value)">Register</button>
+<div style="width: 90%; margin: 5% 10% 0 5%">
+  <h1 style="margin-bottom: 3px">Registration</h1>
+  <p style="color: grey">Fill in the form below to regitser.</p>
+  <hr />
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your email</mat-label>
+    <input matInput placeholder="mail@example.com" [formControl]="email" required>
+    <mat-error *ngIf="email.invalid">{{getEmailError()}}</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your password</mat-label>
+    <input matInput
+           [type]="hidePass ? 'password' : 'text'"
+           [formControl]="password" required>
+    <button mat-icon-button matSuffix
+            style="border: 0 !important"
+            (click)="hidePass = !hidePass"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hidePass">
+      <mat-icon>{{hideConfirmPass ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <mat-error *ngIf="password.invalid">{{getPasswordError()}}</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Confirm your password</mat-label>
+    <input matInput
+           [type]="hideConfirmPass ? 'password' : 'text'"
+           [formControl]="confirmPassword" required>
+    <button mat-icon-button matSuffix
+            style="border: 0 !important"
+            (click)="hideConfirmPass = !hideConfirmPass"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hideConfirmPass">
+      <mat-icon>{{hideConfirmPass ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <mat-error *ngIf="confirmPassword.invalid">{{getConfirmPasswordError()}}</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Who are you?</mat-label>
+    <mat-select [formControl]="role" required>
+      <mat-option *ngFor="let r of roles" [value]="r.role">
+        {{r.desc}}
+      </mat-option>
+    </mat-select>
+    <mat-error *ngIf="role.invalid">{{ getRoleError() }}</mat-error>
+  </mat-form-field>
+
+  <div style="text-align:center">
+    <button (click)="register()"
+            mat-raised-button color="primary"
+            class="registerButton">
+      Register
+    </button>
+  </div>
+</div>

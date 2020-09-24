@@ -25,20 +25,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\form\form-field-error-example.ts" />
     <None Remove="ClientApp\src\app\models\date-posted.ts" />
     <None Remove="ClientApp\src\app\models\experience-level.ts" />
     <None Remove="ClientApp\src\app\models\job-type.ts" />
     <None Remove="ClientApp\src\app\models\job.ts" />
+    <None Remove="ClientApp\src\app\models\role.ts" />
     <None Remove="ClientApp\src\app\models\salary-type.ts" />
     <None Remove="ClientApp\src\app\services\job-service.ts" />
     <None Remove="ClientApp\src\app\services\jwt-interceptor.ts" />
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\form\form-field-error-example.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\date-posted.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\experience-level.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\job-type.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\job.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\models\role.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\salary-type.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\job-service.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\jwt-interceptor.ts" />
