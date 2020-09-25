@@ -22,30 +22,52 @@ export class Job {
         throw new Error("The maximal salary must be greater than or equal to the minimal salary!");
     }
   }
-
+  
   getSalaryDescription(): string {
     if (!this.salaryType)
       return null;
     if (!this.salaryMax && !this.salaryMin)
       return null;
+
+    let salaryDesc = Job.getSalaryTypeDescription(this.salaryType);
+
     if (this.salaryMax && this.salaryMin)
-      return `From $${this.salaryMin} to $${this.salaryMax} ${this.salaryType}`;
+      return `From $${this.salaryMin} to $${this.salaryMax} ${salaryDesc}`;
     if (this.salaryMin)
-      return `From $${this.salaryMin} ${this.salaryType}`;
+      return `From $${this.salaryMin} ${salaryDesc}`;
     else
-      return `To $${this.salaryMax} ${this.salaryType}`;
+      return `To $${this.salaryMax} ${salaryDesc}`;
   }
 
-  getShortDescription(maxLength: number) : string {
-    if (this.description.length <= maxLength) {
-      return this.description;
+  static getSalaryTypeDescription(salaryType: SalaryType): string {
+    switch (salaryType) {
+      case SalaryType.PerHour: return "per hour";
+      case SalaryType.PerMonth: return "per month";
+      case SalaryType.PerYear: return "per year";
     }
+  }
 
-    let description = this.description.substring(0, maxLength);
-    if (!description.endsWith("."))
-      description += "...";
+  static getJobTypeDescription(jobType : JobType): string {
+    switch (jobType) {
+      case JobType.Fulltime: return "Full-time";
+      case JobType.Parttime: return "Part-time";
+    }
+  }
 
-    return description;
+  static getDatePostedDescription(datePosted : DatePosted): string {
+    switch (datePosted) {
+      case DatePosted.Last24Hours: return "Last 24 hours";
+      case DatePosted.Last7Days: return "Last 7 days";
+      case DatePosted.Last14Days: return "Last 14 days";
+    }
+  }
+
+  static getExpLevelDescription(expLevel: ExperienceLevel): string {
+    switch (expLevel) {
+      case ExperienceLevel.Entry: return "Entry Level";
+      case ExperienceLevel.Mid: return "Mid Level";
+      case ExperienceLevel.Senior: return "Senior Level";
+    }
   }
 
   getMaxSalaryPerHour(): number {

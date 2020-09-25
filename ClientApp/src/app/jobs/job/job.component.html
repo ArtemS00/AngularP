@@ -1,0 +1,28 @@
+<div class="mainBlock">
+  <h1 style="margin-bottom: 3px; font-weight: 700"
+      class="overflowtext">
+    {{ job.title }}
+  </h1>
+  <div class="overflowtext">
+    <p class="detalis">{{ job.location }}</p>
+    <p class="detalis">{{ jobTypeDesc }}</p>
+    <p *ngIf="job.isRemote"
+       class="detalis">Remote</p>
+  </div>
+  <hr />
+  <div *ngIf="job.salaryMin || job.salaryMax">
+    <h2 style="font-weight: 600">Job Details</h2>
+    <p style="font-weight: 600; margin-bottom: 3px">Salary</p>
+    <p>{{ job.getSalaryDescription() }}</p>
+  </div>
+  <h2 style="font-weight: 600; margin: 30px 0 10px 0">Full Job Description</h2>
+  <p style="white-space: pre-line">{{ job.description }}</p>
+  <p class="dateText">{{ job.getDatePosted() }}</p>
+  <div style="text-align:center">
+    <button (click)="apply()"
+            class="applyButton"
+            mat-raised-button color="primary">
+      Apply
+    </button>
+  </div>
+</div>

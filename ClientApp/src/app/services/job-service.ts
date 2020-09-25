@@ -117,4 +117,8 @@ export class JobService {
   getAll(): Job[] {
     return this.jobs;
   }
+
+  get(id: number): Job {
+    return this.jobs.find(j => j.id == id);
+  }
 }

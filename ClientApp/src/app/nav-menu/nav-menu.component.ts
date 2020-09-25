@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthService } from '../services/auth-service';
+import { Role } from '../models/role';
 
 @Component({
   selector: 'app-nav-menu',
@@ -17,6 +18,10 @@ export class NavMenuComponent {
 
   isLoggedIn(): boolean {
     return this.authService.isAuthenticated();
+  }
+
+  isLoggedAsEmployer(): boolean {
+    return this.authService.isAuthenticatedAs(Role.Employer);
   }
 
   logout() {

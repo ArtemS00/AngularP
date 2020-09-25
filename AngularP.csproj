@@ -19,13 +19,17 @@
 
   <ItemGroup>
     <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\app\form\**" />
     <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\app\form\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\form\**" />
     <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\app\form\**" />
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="ClientApp\src\app\form\form-field-error-example.ts" />
+    <None Remove="ClientApp\src\app\extensions.ts" />
     <None Remove="ClientApp\src\app\models\date-posted.ts" />
     <None Remove="ClientApp\src\app\models\experience-level.ts" />
     <None Remove="ClientApp\src\app\models\job-type.ts" />
@@ -37,7 +41,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\src\app\form\form-field-error-example.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\date-posted.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\experience-level.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\models\job-type.ts" />

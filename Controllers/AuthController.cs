@@ -65,7 +65,8 @@ namespace AngularP.Controllers
                 var token = GenerateJWT(user);
                 return Ok(new
                 {
-                    access_token = token
+                    access_token = token,
+                    role = user.Role
                 });
             }
 

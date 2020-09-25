@@ -23,3 +23,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.snackBar {
+  color: red !important;
+  text-align: center !important;
+  background-color: white;
+}
+
+.mainBlock {
+  width: 90%;
+  margin: 5% 10% 2% 5%;
+}
+

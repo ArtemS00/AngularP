@@ -1,4 +1,4 @@
-<div style="width: 90%;min-width:900px; margin-left: 5%; margin-bottom: 20px">
+<div class="mainBlock" style="min-width:900px; margin-bottom: 20px">
   <form class="form-inline" style="margin-bottom: 20px">
     <div class="input-group" style="margin-right: 15px; width: 350px">
       <div class="input-group-prepend">
@@ -32,13 +32,13 @@
       <a *ngFor="let datePosted of datesPosted"
          (click)="selectedDatePosted = datePosted; onClick(datePostedSelector.id, datePostedButton.id);"
          class="dropdown-item">
-        {{ datePosted }}
+        {{ datePosted.desc }}
       </a>
     </div>
     <button #datePostedButton
             id="datePostedButton" type="button" class="btn btn-primary" hidden>
       <p style="display:inline-block; margin: 0 5px 0 0">
-        {{ selectedDatePosted }}
+        {{ selectedDatePosted?.desc }}
       </p>
       <span style="font-weight: 700; font-size: 16px; margin: 0"
             (click)="selectedDatePosted = null; onDelete(datePostedSelector.id, datePostedButton.id);">
@@ -56,13 +56,13 @@
       <a *ngFor="let jobType of jobTypes"
          (click)="selectedJobType = jobType; onClick(jobTypeSelector.id, jobTypeButton.id);"
          class="dropdown-item">
-        {{ jobType }}
+        {{ jobType.desc }}
       </a>
     </div>
     <button #jobTypeButton
             id="jobTypeButton" type="button" class="btn btn-primary" hidden>
       <p style="display:inline-block; margin: 0 5px 0 0">
-        {{ selectedJobType }}
+        {{ selectedJobType?.desc }}
       </p>
       <span style="font-weight: 700; font-size: 16px; margin: 0"
             (click)="selectedJobType = null; onDelete(jobTypeSelector.id, jobTypeButton.id);">
@@ -80,13 +80,13 @@
       <a *ngFor="let expLevel of expLevels"
          (click)="selectedExpLevel = expLevel; onClick(expLevelSelector.id, expLevelButton.id);"
          class="dropdown-item">
-        {{ expLevel }}
+        {{ expLevel.desc }}
       </a>
     </div>
     <button #expLevelButton
             id="expLevelButton" type="button" class="btn btn-primary" hidden>
       <p style="display:inline-block; margin: 0 5px 0 0">
-        {{ selectedExpLevel }}
+        {{ selectedExpLevel?.desc }}
       </p>
       <span style="font-weight: 700; font-size: 16px; margin: 0"
             (click)="selectedExpLevel = null; onDelete(expLevelSelector.id, expLevelButton.id);">
@@ -151,10 +151,10 @@
 </div>
 <div style="margin-left: 5%; width: 90%; min-width:950px;" *ngIf="jobsForShow.length > 0">
   <div class="row">
-    <app-job *ngFor="let job of jobsForShow"
+    <app-job-item *ngFor="let job of jobsForShow"
              [job]="job"
              class="col-sm-6" style="margin-bottom:10px">
-    </app-job>
+    </app-job-item>
   </div>
   <div *ngIf="pageNumbers.length > 1"
        class="btn-toolbar" style="margin: 20px 0 20px 0">

@@ -25,8 +25,11 @@
               [routerLinkActiveOptions]="{ exact: true }">
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
+          <li class="nav-item" [routerLinkActive]="['link-active']" style="text-align:left">
             <a class="nav-link text-dark" [routerLink]="['/jobs']">Jobs</a>
+          </li>
+          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="isLoggedAsEmployer()">
+            <a class="nav-link text-dark" [routerLink]="['/jobs/create']">Post Job</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="!isLoggedIn()">
             <a class="nav-link text-dark" [routerLink]="['/login']">Login</a>

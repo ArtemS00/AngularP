@@ -30,9 +30,8 @@ export class RegisterComponent {
     this.form = new FormGroup({ email: this.email, password: this.password, confirmPassword: this.confirmPassword, role: this.role });
   }
 
-  matchValues(control: FormControl,
-    matchTo: FormControl // name of the control to match to
-  ): (AbstractControl) => ValidationErrors | null {
+  matchValues(control: FormControl, matchTo: FormControl):
+    (AbstractControl) => ValidationErrors | null {
     return (): ValidationErrors | null => {
       return control && matchTo && control.value === matchTo.value
         ? null
@@ -56,10 +55,10 @@ export class RegisterComponent {
       return 'You must enter a value';
     }
     if (this.password.hasError('minlength')) {
-      return 'Not a valid password. Use 8 or more characters';
+      return 'Not a valid password. Use 8 or more characters.';
     }
     if (this.password.hasError('maxlength')) {
-      return 'Not a valid password. Use 128 or less characters';
+      return 'Not a valid password. Use 128 or less characters.';
     }
 
     return this.password.hasError('pattern') ? 'Not a valid password. Allowed characters a-z, A-Z, 0-9.' : '';

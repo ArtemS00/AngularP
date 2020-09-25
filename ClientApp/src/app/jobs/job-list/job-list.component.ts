@@ -9,7 +9,7 @@ const jobsPerPage: number = 10;
 const buttonsCount: number = 7;
 
 @Component({
-  selector: 'app-jobs',
+  selector: 'app-job-list',
   templateUrl: './job-list.component.html',
   styleUrls: ['./job-list.component.css']
 })
@@ -19,12 +19,20 @@ export class JobListComponent implements AfterViewInit {
   jobs: Job[];
   orignalJobs: Job[];
 
-  jobTypes: JobType[] = [JobType.Fulltime, JobType.Parttime];
-  expLevels: ExperienceLevel[] = [ExperienceLevel.Entry, ExperienceLevel.Mid, ExperienceLevel.Senior];
-  datesPosted: DatePosted[] = [DatePosted.Last24Hours, DatePosted.Last7Days, DatePosted.Last14Days];
-  selectedJobType: string;
-  selectedExpLevel: string;
-  selectedDatePosted: string;
+  jobTypes: { enum: JobType, desc: string }[] = [
+    { enum: JobType.Fulltime, desc: Job.getJobTypeDescription(JobType.Fulltime) },
+    { enum: JobType.Parttime, desc: Job.getJobTypeDescription(JobType.Parttime) }];
+  expLevels: { enum: ExperienceLevel, desc: string }[] = [
+    { enum: ExperienceLevel.Entry, desc: Job.getExpLevelDescription(ExperienceLevel.Entry) },
+    { enum: ExperienceLevel.Mid, desc: Job.getExpLevelDescription(ExperienceLevel.Mid) },
+    { enum: ExperienceLevel.Senior, desc: Job.getExpLevelDescription(ExperienceLevel.Senior) }];
+  datesPosted: { enum: DatePosted, desc: string }[] = [
+    { enum: DatePosted.Last24Hours, desc: Job.getDatePostedDescription(DatePosted.Last24Hours) },
+    { enum: DatePosted.Last7Days, desc: Job.getDatePostedDescription(DatePosted.Last7Days) },
+    { enum: DatePosted.Last14Days, desc: Job.getDatePostedDescription(DatePosted.Last14Days) }];
+  selectedJobType: { enum: JobType, desc: string };
+  selectedExpLevel: { enum: ExperienceLevel, desc: string };
+  selectedDatePosted: { enum: DatePosted, desc: string };
   isRemote: boolean;
 
   pageNumbers: number[];
@@ -117,9 +125,9 @@ export class JobListComponent implements AfterViewInit {
 
   private filterJobs() {
     this.jobs = this.orignalJobs.filter(j =>
-      (this.selectedDatePosted == null || j.isPostedIn(this.selectedDatePosted as DatePosted)) &&
-      (this.selectedJobType == null || j.jobType == this.selectedJobType) &&
-      (this.selectedExpLevel == null || j.experienceLevel == this.selectedExpLevel) &&
+      (this.selectedDatePosted == null || j.isPostedIn(this.selectedDatePosted.enum)) &&
+      (this.selectedJobType == null || j.jobType == this.selectedJobType.enum) &&
+      (this.selectedExpLevel == null || j.experienceLevel == this.selectedExpLevel.enum) &&
       (this.searchDescription == null || j.description.toLowerCase().includes(this.searchDescription)
         || j.title.toLowerCase().includes(this.searchDescription)) &&
       (this.searchLocation == null || j.location.toLowerCase().includes(this.searchLocation)) &&

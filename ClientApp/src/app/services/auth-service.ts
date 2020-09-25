@@ -29,6 +29,7 @@ export class AuthService {
       .pipe(
         tap(token => {
           localStorage.setItem(ACCESS_TOKEN_KEY, token.access_token);
+          localStorage.setItem(USER_ROLE, Role[token.role]);
         }));
   }
 
@@ -51,7 +52,7 @@ export class AuthService {
     let token = localStorage.getItem(ACCESS_TOKEN_KEY);
     let userRole = localStorage.getItem(USER_ROLE);
     return token && !this.jwtHelper.isTokenExpired(token) &&
-      userRole && userRole == role.toString();
+      userRole && userRole == Role[role].toString();
   }
 
   logout(): void {

@@ -1,3 +1,31 @@
-.bold{
-    font-weight: 700;
+.bold {
+  font-weight: 700;
 }
+
+.item {
+  height: 100px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.titleLink {
+    width: 90%;
+}
+
+  .titleLink:hover {
+    cursor: pointer;
+  }
+
+.mat-icon-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+button:focus {
+  outline: 0;
+}
+
