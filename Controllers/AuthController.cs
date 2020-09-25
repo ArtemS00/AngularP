@@ -72,23 +72,10 @@ namespace AngularP.Controllers
             return Unauthorized();
         }
 
-        [Route("get")]
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok(new { somedata = "ok"});
-        }
-
-        [Route("superget")]
-        [HttpGet]
-        [Authorize]
-        public IActionResult SuperGet()
-        {
-            return Ok(new { megadata = "ok!!" });
-        }
-
         private bool RegisterUser(string email, string password, Role role)
         {
+            if (role == Role.Admin)
+                return false;
             if (Accounts.Any(a => a.Email == email))
                 return false;
 

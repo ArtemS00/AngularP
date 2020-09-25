@@ -1,0 +1,15 @@
+.mat-form-field {
+  margin-top: 10px;
+  width: 100%;
+}
+
+button:focus {
+  outline: 0;
+}
+
+.loginButton {
+  width: 250px;
+  height: 50px;
+  font-size: 18px;
+  margin-top: 8px;
+}

@@ -1,5 +1,33 @@
-<p>login works!</p>
-<input #email type="email"/>
-<input #password type="password"/>
-<p style="color:red">{{errorMessage}}</p>
-<button (click)="login(email.value, password.value)">Login</button>
+<div style="width: 90%; margin: 5% 10% 0 5%">
+  <h1 style="margin-bottom: 3px">Login</h1>
+  <p style="color: grey">Fill in the form below to login.</p>
+  <hr />
+  <mat-field *ngIf="errorMessage"
+             style="color:#f44336">{{errorMessage}}</mat-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your email</mat-label>
+    <input matInput placeholder="mail@example.com" [formControl]="email" required>
+    <mat-error *ngIf="email.invalid">{{getEmailError()}}</mat-error>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Enter your password</mat-label>
+    <input matInput
+           [type]="hidePass ? 'password' : 'text'"
+           [formControl]="password" required>
+    <button mat-icon-button matSuffix
+            style="border: 0 !important"
+            (click)="hidePass = !hidePass"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hidePass">
+      <mat-icon>{{hidePass ? 'visibility_off' : 'visibility'}}</mat-icon>
+    </button>
+    <mat-error *ngIf="password.invalid">{{getPasswordError()}}</mat-error>
+  </mat-form-field>
+  <div style="text-align:center">
+    <button (click)="login()"
+            mat-raised-button color="primary"
+            class="loginButton">
+      Login
+    </button>
+  </div>
+</div>

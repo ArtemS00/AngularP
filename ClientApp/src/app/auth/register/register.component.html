@@ -17,7 +17,7 @@
             (click)="hidePass = !hidePass"
             [attr.aria-label]="'Hide password'"
             [attr.aria-pressed]="hidePass">
-      <mat-icon>{{hideConfirmPass ? 'visibility_off' : 'visibility'}}</mat-icon>
+      <mat-icon>{{hidePass ? 'visibility_off' : 'visibility'}}</mat-icon>
     </button>
     <mat-error *ngIf="password.invalid">{{getPasswordError()}}</mat-error>
   </mat-form-field>
