@@ -1,0 +1,28 @@
+<div class="dropdown" style="display:inline-block; margin-right: 5px">
+  <button class="btn btn-primary dropdown-toggle app-dropdown" type="button" [id]="options.id"
+          data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    {{ options.currentText }}
+  </button>
+  <div class="dropdown-menu" [attr.aria-labelledby]="options.id" id="options.menuId">
+    <form>
+      <div class="dropdown-item selectOption app-dropdown-item">
+        <p style="color:black !important">{{ options.description }}</p>
+        <mat-slider name="{{options.id}}"
+                    [min]="options.min" [max]="options.max"
+                    [thumbLabel]="true"
+                    [displayWith]="options.valueFormater"
+                    [(ngModel)]="options.currentValue"
+                    style="margin: 5px 10% 0 10%; width:80%;"></mat-slider>
+        <br />
+        <button (click)="onChange(true)"
+                class="btn btn-light">
+          Reset
+        </button>
+        <button (click)="onChange(false)"
+                class="btn btn-light" style="float:right">
+          Apply
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,10 @@
+<form class="form-inline" style="margin-bottom: 20px">
+  <mat-form-field *ngFor="let item of options.items" class="example-full-width" style="width:{{ (90 - options.items.length) / options.items.length}}%">
+    <mat-label>{{ item.text }}</mat-label>
+    <input matInput [formControl]="item.control"
+           [placeholder]="item.placeholder">
+    <mat-hint *ngIf="item.hint">{{ item.hint }}</mat-hint>
+  </mat-form-field>
+  <button (click)="onSearch()"
+          mat-raised-button color="primary">{{ options.buttonText }}</button>
+</form>

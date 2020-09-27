@@ -32,6 +32,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .mainBlock {
   width: 90%;
-  margin: 5% 10% 2% 5%;
+  margin: 2% 5% 2% 5%;
 }
 
+.mat-icon-button{
+    outline: 0 !important;
+}

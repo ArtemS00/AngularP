@@ -29,3 +29,14 @@ button:focus {
   outline: 0;
 }
 
+.card {
+  background-color: #d9c4ff;
+  border-color: #d9c4ff;
+}
+
+.card-body {
+  background-color: white;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+

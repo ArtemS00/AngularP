@@ -6,6 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -19,13 +20,16 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { HomeComponent } from './home/home.component';
+import { JobCreateComponent } from './jobs/create/create.component';
 import { JobItemComponent } from './jobs/job-item/job-item.component';
 import { JobListComponent } from './jobs/job-list/job-list.component';
 import { JobComponent } from './jobs/job/job.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { ACCESS_TOKEN_KEY } from './services/auth-service';
 import { JwtInterceptor } from './services/jwt-interceptor';
-import { JobCreateComponent } from './jobs/create/create.component';
+import { DropdownButtonComponent } from './tools/dropdown-button/dropdown-button.component';
+import { DropdownSliderComponent } from './tools/dropdown-slider/dropdown-slider.component';
+import { SearchComponent } from './tools/search/search.component';
 
 
 
@@ -43,7 +47,10 @@ export function tokenGetter() {
     JobListComponent,
     JobItemComponent,
     JobComponent,
-    JobCreateComponent
+    JobCreateComponent,
+    DropdownButtonComponent,
+    DropdownSliderComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -65,6 +72,7 @@ export function tokenGetter() {
     MatButtonModule,
     MatSelectModule,
     MatSnackBarModule,
+    MatPaginatorModule,
     CommonModule,
     JwtModule.forRoot({
       config: {

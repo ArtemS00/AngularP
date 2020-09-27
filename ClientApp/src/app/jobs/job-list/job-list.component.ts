@@ -4,9 +4,11 @@ import { JobType } from '../../models/job-type';
 import { ExperienceLevel } from '../../models/experience-level';
 import { JobService } from '../../services/job-service';
 import { DatePosted } from '../../models/date-posted';
-
-const jobsPerPage: number = 10;
-const buttonsCount: number = 7;
+import { DropdownOptions, DropdownItem } from '../../tools/dropdown-button/dropdown-button.component';
+import { DropdownSliderOptions } from '../../tools/dropdown-slider/dropdown-slider.component';
+import { PageEvent } from '@angular/material/paginator';
+import { SearchOptions } from '../../tools/search/search.component';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-job-list',
@@ -14,159 +16,76 @@ const buttonsCount: number = 7;
   styleUrls: ['./job-list.component.css']
 })
 
-export class JobListComponent implements AfterViewInit {
+export class JobListComponent {
   jobsForShow: Job[];
   jobs: Job[];
   orignalJobs: Job[];
 
-  jobTypes: { enum: JobType, desc: string }[] = [
-    { enum: JobType.Fulltime, desc: Job.getJobTypeDescription(JobType.Fulltime) },
-    { enum: JobType.Parttime, desc: Job.getJobTypeDescription(JobType.Parttime) }];
-  expLevels: { enum: ExperienceLevel, desc: string }[] = [
-    { enum: ExperienceLevel.Entry, desc: Job.getExpLevelDescription(ExperienceLevel.Entry) },
-    { enum: ExperienceLevel.Mid, desc: Job.getExpLevelDescription(ExperienceLevel.Mid) },
-    { enum: ExperienceLevel.Senior, desc: Job.getExpLevelDescription(ExperienceLevel.Senior) }];
-  datesPosted: { enum: DatePosted, desc: string }[] = [
-    { enum: DatePosted.Last24Hours, desc: Job.getDatePostedDescription(DatePosted.Last24Hours) },
-    { enum: DatePosted.Last7Days, desc: Job.getDatePostedDescription(DatePosted.Last7Days) },
-    { enum: DatePosted.Last14Days, desc: Job.getDatePostedDescription(DatePosted.Last14Days) }];
-  selectedJobType: { enum: JobType, desc: string };
-  selectedExpLevel: { enum: ExperienceLevel, desc: string };
-  selectedDatePosted: { enum: DatePosted, desc: string };
-  isRemote: boolean;
+  searchDescriptionControl = new FormControl();
+  searchLocationControl = new FormControl();
+  searchOptions: SearchOptions = new SearchOptions("Search", [
+    { control: this.searchDescriptionControl, text: "What...", hint: "Job Description", placeholder: ".NET developer" },
+    { control: this.searchLocationControl, text: "Where...", hint: "Job Location", placeholder: "San Diego, CA" }]);
 
-  pageNumbers: number[];
-  pageNumber: number = 1;
-  salarySliderValue: number = 1;
-  salaryValue: number;
-  salaryString: string = "Salary Estimate";
-  salaryFilterEnabled: boolean = false;
+  datePostedOptions: DropdownOptions = new DropdownOptions("datePostedDropdown", "Date Posted", [
+    { value: DatePosted.Last24Hours, description: Job.getDatePostedDescription(DatePosted.Last24Hours) },
+    { value: DatePosted.Last7Days, description: Job.getDatePostedDescription(DatePosted.Last7Days) },
+    { value: DatePosted.Last14Days, description: Job.getDatePostedDescription(DatePosted.Last14Days) }]);
+  jobTypeOptions: DropdownOptions = new DropdownOptions("jobTypeDropdown", "Job Type", [
+    { value: JobType.Fulltime, description: Job.getJobTypeDescription(JobType.Fulltime) },
+    { value: JobType.Parttime, description: Job.getJobTypeDescription(JobType.Parttime) }]);
+  expLevelOptions: DropdownOptions = new DropdownOptions("expLevelDropdown", "Experience Level", [
+    { value: ExperienceLevel.Entry, description: Job.getExpLevelDescription(ExperienceLevel.Entry) },
+    { value: ExperienceLevel.Mid, description: Job.getExpLevelDescription(ExperienceLevel.Mid) },
+    { value: ExperienceLevel.Senior, description: Job.getExpLevelDescription(ExperienceLevel.Senior) }]);
+  remoteOptions: DropdownOptions = new DropdownOptions("remoteDropdown", "Remote", [
+    { value: true, description: "Remote" }]);
+  salaryOptions: DropdownSliderOptions = new DropdownSliderOptions(
+    "salaryDropdown", "Salary Estimate", "What’s your desired salary per hour?",
+    1, 100, undefined, (v) => `$${v}+`, (v) => `$${v} per hour`);
 
-  private searchDescription: string;
-  private searchLocation: string;
+  length: number = 0;
+  pageSize: number = 10;
+  pageSizeOptions: number[] = [5, 10, 25, 100];
 
   constructor(private jobService: JobService) {
     this.jobs = this.jobService.getAll();
     this.orignalJobs = this.jobs.copyWithin(this.jobs.length, 0);
     this.loadJobs();
-    this.setPages();
   }
 
-  ngAfterViewInit() {
-    this.onPageChange(1);
-  }
-
-  onClick(seletorId: string, buttonId: string) {
-    this.changeVisibility(seletorId, buttonId, false);
-    this.filterJobs();
-  }
-
-  onDelete(seletorId: string, buttonId: string) {
-    this.changeVisibility(seletorId, buttonId, true);
-    this.filterJobs();
-  }
-
-  onPageChange(pageNumber: number) {
-    if (pageNumber > this.getLastPageNumber())
-      pageNumber = this.getLastPageNumber();
-    if (pageNumber < 1)
-      pageNumber = 1;
-
-    this.pageNumber = pageNumber;
-    this.setPages();
+  private pageEvent: PageEvent = { pageIndex: 0, pageSize: this.pageSize, length: this.length }
+  pageChanged(pageEvent: PageEvent) {
+    this.pageEvent = pageEvent;
     this.loadJobs();
   }
 
-  nextPage() {
-    this.onPageChange(this.pageNumber + 1);
-  }
-
-  previousPage() {
-    this.onPageChange(this.pageNumber - 1);
-  }
-
-  search(description: string, location: string) {
-    this.searchDescription = description.toLowerCase();
-    this.searchLocation = location.toLowerCase();
-
+  dropdownChanged() {
     this.filterJobs();
   }
 
-  formatSliderLabel(value: string) {
-    return "$" + value + "+";
-  }
-
-  private lastSalaryValue: number;
-  salaryChanged() {
-    if (!this.salaryFilterEnabled) {
-      this.salaryString = "Salary Estimate";
-      this.salaryValue = undefined;
-    }
-    else {
-      this.salaryString = "$" + this.salarySliderValue + " per hour";
-      this.salaryValue = this.salarySliderValue;
-    }
-
-    if (this.lastSalaryValue !== this.salaryValue) {
-      this.filterJobs();
-    }
-    this.lastSalaryValue = this.salaryValue;
-  }
-
-  closeDropdownElement(id:string) {
-    let element = document.getElementById(id);
-    if (element)
-      element.className = element.className.replace("show", "");
-  }
-
-  private getLastPageNumber() {
-    return Math.floor((this.jobs.length - 1) / jobsPerPage) + 1;
+  search() {
+    this.filterJobs();
   }
 
   private filterJobs() {
     this.jobs = this.orignalJobs.filter(j =>
-      (this.selectedDatePosted == null || j.isPostedIn(this.selectedDatePosted.enum)) &&
-      (this.selectedJobType == null || j.jobType == this.selectedJobType.enum) &&
-      (this.selectedExpLevel == null || j.experienceLevel == this.selectedExpLevel.enum) &&
-      (this.searchDescription == null || j.description.toLowerCase().includes(this.searchDescription)
-        || j.title.toLowerCase().includes(this.searchDescription)) &&
-      (this.searchLocation == null || j.location.toLowerCase().includes(this.searchLocation)) &&
-      (this.isRemote == undefined || j.isRemote == this.isRemote) &&
-      (this.salaryValue == undefined || j.getMaxSalaryPerHour() >= this.salaryValue));
-
-    this.onPageChange(this.pageNumber);
-  }
-
-  private changeVisibility(seletorId: string, buttonId: string, isFromDelete: boolean) {
-    let selector = document.getElementById(seletorId);
-    selector.hidden = !isFromDelete;
-    let button = document.getElementById(buttonId);
-    button.hidden = isFromDelete;
+      (!this.datePostedOptions.selectedItem || j.isPostedIn(this.datePostedOptions.selectedItem.value)) &&
+      (!this.jobTypeOptions.selectedItem || j.jobType == this.jobTypeOptions.selectedItem.value) &&
+      (!this.expLevelOptions.selectedItem || j.experienceLevel == this.expLevelOptions.selectedItem.value) &&
+      (!this.searchDescriptionControl.value
+        || j.description.toLowerCase().includes(this.searchDescriptionControl.value.toLowerCase())
+        || j.title.toLowerCase().includes(this.searchDescriptionControl.value.toLowerCase())) &&
+      (!this.searchLocationControl.value
+        || j.location.toLowerCase().includes(this.searchLocationControl.value.toLowerCase())) &&
+      (!this.remoteOptions.selectedItem || j.isRemote == this.remoteOptions.selectedItem.value) &&
+      (!this.salaryOptions.value || j.getMaxSalaryPerHour() >= this.salaryOptions.value));
+    this.loadJobs();
   }
 
   private loadJobs() {
-    this.jobsForShow = this.jobs.slice(jobsPerPage * (this.pageNumber - 1), jobsPerPage * this.pageNumber);
-  }
-
-  private setPages() {
-    let lastPage = this.getLastPageNumber();
-    if (lastPage <= buttonsCount) {
-      this.setPageNumbers(1, lastPage);
-      return;
-    }
-    let oneSidePages = Math.floor((buttonsCount - 1) / 2);
-    if (this.pageNumber - 1 < oneSidePages) {
-      this.setPageNumbers(1, buttonsCount);
-      return;
-    }
-    if (this.pageNumber + oneSidePages > lastPage) {
-      this.setPageNumbers(lastPage - buttonsCount + 1, lastPage);
-      return;
-    }
-    this.setPageNumbers(this.pageNumber - oneSidePages, this.pageNumber + oneSidePages);
-  }
-
-  private setPageNumbers(start: number, end: number) {
-    this.pageNumbers = new Array(end - start + 1).fill(0).map((_, i) => start + i);
+    this.length = this.jobs.length;
+    this.jobsForShow = this.jobs.slice(this.pageEvent.pageSize * this.pageEvent.pageIndex,
+      this.pageEvent.pageSize * (this.pageEvent.pageIndex + 1));
   }
 }
