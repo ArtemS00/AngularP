@@ -38,3 +38,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-icon-button{
     outline: 0 !important;
 }
+
+.mat-menu-item{
+    outline: 0 !important;
+}

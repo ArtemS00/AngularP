@@ -20,25 +20,33 @@
         [ngClass]="{ show: isExpanded }"
       >
         <ul class="navbar-nav flex-grow">
-          <li class="nav-item"
-              [routerLinkActive]="['link-active']"
-              [routerLinkActiveOptions]="{ exact: true }">
-            <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+          <li>
+            <button mat-icon-button [routerLink]="['']">
+              <mat-icon>home</mat-icon>
+            </button>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']" style="text-align:left">
-            <a class="nav-link text-dark" [routerLink]="['/jobs']">Jobs</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="isLoggedAsEmployer()">
-            <a class="nav-link text-dark" [routerLink]="['/jobs/create']">Post Job</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="!isLoggedIn()">
-            <a class="nav-link text-dark" [routerLink]="['/login']">Login</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="!isLoggedIn()">
-            <a class="nav-link text-dark" [routerLink]="['/register']">Register</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']" *ngIf="isLoggedIn()">
-            <a class="nav-link text-dark" style="cursor: pointer" (click)="logout()">Logout</a>
+          <li>
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>account_circle</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item [routerLink]="['/login']" *ngIf="!isLoggedIn()">
+                <mat-icon>login</mat-icon>
+                <span>Login</span>
+              </button>
+              <button mat-menu-item [routerLink]="['/register']" *ngIf="!isLoggedIn()">
+                <mat-icon>how_to_reg</mat-icon>
+                <span>Register</span>
+              </button>
+              <button mat-menu-item *ngIf="isLoggedIn()" (click)="logout()">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Logout</span>
+              </button>
+              <button mat-menu-item [routerLink]="['/jobs/create']" *ngIf="isLoggedAsEmployer()">
+                <mat-icon>create</mat-icon>
+                <span>Post Job</span>
+              </button>
+            </mat-menu>
           </li>
         </ul>
       </div>

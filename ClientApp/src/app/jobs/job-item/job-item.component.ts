@@ -32,6 +32,9 @@ export class JobItemComponent {
   }
 
   openOnNewTab() {
-    window.open(this.router.url.replace("jobs", `job/${this.job.id}`));
+    if (this.router.url.includes("jobs"))
+      window.open(this.router.url.replace("jobs", `job/${this.job.id}`));
+    else
+      window.open(this.router.url + `job/${this.job.id}`);
   }
 }
