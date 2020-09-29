@@ -4,24 +4,35 @@ import { SalaryType } from "./salary-type";
 import { DatePosted } from "./date-posted";
 
 export class Job {
+  public id: number;
+  public authorId: number;
+  public title: string;
+  public description: string;
+  public salaryMin: number;
+  public salaryMax: number;
+  public salaryType: SalaryType;
+  public datePosted: Date;
+  public location: string;
+  public isRemote: boolean;
+  public experienceLevel: ExperienceLevel;
+  public jobType: JobType;
 
-  constructor(
-    public id: number,
-    public authorId: number,
-    public title: string,
-    public description: string,
-    public salaryMin: number,
-    public salaryMax: number,
-    public salaryType: SalaryType,
-    public datePosted: Date,
-    public location: string,
-    public isRemote: boolean,
-    public experienceLevel: ExperienceLevel,
-    public jobType: JobType) {
-    if (salaryMax && salaryMin) {
-      if (salaryMax < salaryMin)
-        throw new Error("The maximal salary must be greater than or equal to the minimal salary!");
-    }
+  constructor(job: Job = null) {
+    if (!job)
+      return;
+
+    this.id = job.id;
+    this.authorId = job.authorId;
+    this.title = job.title;
+    this.description = job.description;
+    this.salaryMin = job.salaryMin ? job.salaryMin : undefined;
+    this.salaryMax = job.salaryMax ? job.salaryMax : undefined;
+    this.salaryType = job.salaryType;
+    this.datePosted = new Date(job.datePosted);
+    this.location = job.location;
+    this.isRemote = job.isRemote;
+    this.experienceLevel = job.experienceLevel;
+    this.jobType = job.jobType;
   }
   
   getSalaryDescription(): string {

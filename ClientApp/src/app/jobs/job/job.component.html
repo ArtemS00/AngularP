@@ -1,4 +1,4 @@
-<div class="mainBlock">
+<div class="mainBlock" *ngIf="job">
   <h1 style="margin-bottom: 3px; font-weight: 700"
       class="overflowtext">
     {{ job.title }}
@@ -16,7 +16,7 @@
     <p>{{ job.getSalaryDescription() }}</p>
   </div>
   <h2 style="font-weight: 600; margin: 30px 0 10px 0">Full Job Description</h2>
-  <p style="white-space: pre-line">{{ job.description }}</p>
+  <p style="white-space: pre-line; word-wrap: break-word">{{ job.description }}</p>
   <p class="dateText">{{ job.getDatePosted() }}</p>
   <div style="text-align:center">
     <button (click)="apply()"

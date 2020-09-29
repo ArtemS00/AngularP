@@ -1,5 +1,5 @@
 ﻿using AngularP.Models;
-using Microsoft.AspNetCore.Authorization;
+using AngularP.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -14,29 +14,23 @@ namespace AngularP.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private static List<Account> Accounts = new List<Account>()
-        {
-            new Account()
-            {
-                Id = Guid.Parse("a524616a-4113-672a-4cdd-1dc552ac0399"),
-                Email = "user@gmail.com",
-                Password = "user",
-                Role = Role.JobSeeker
-            }
-        };
         private IOptions<AuthOptions> _authOptions;
+        private AccountRepository repository;
 
-        public AuthController(IOptions<AuthOptions> authOptions)
+        public AuthController(AccountRepository repository, IOptions<AuthOptions> authOptions)
         {
             _authOptions = authOptions;
+            this.repository = repository;
         }
 
         [Route("login")]
         [HttpPost]
         public IActionResult Login([FromBody]LoginModel loginModel)
         {
-            var user = AuthenticateUser(loginModel.Email, loginModel.Password);
+            if (!ModelState.IsValid)
+                throw new ArgumentException("Model is invalid!");
 
+            var user = AuthenticateUser(loginModel.Email, loginModel.Password);
             if (user != null)
             {
                 var token = GenerateJWT(user);
@@ -54,12 +48,14 @@ namespace AngularP.Controllers
         [HttpPost]
         public IActionResult Register([FromBody]RegisterModel registerModel)
         {
+            if (!ModelState.IsValid)
+                throw new ArgumentException("Model is invalid!");
+
             var isSuccess = RegisterUser(registerModel.Email, registerModel.Password, registerModel.Role);
             if (!isSuccess)
                 return Unauthorized();
 
             var user = AuthenticateUser(registerModel.Email, registerModel.Password);
-
             if (user != null)
             {
                 var token = GenerateJWT(user);
@@ -77,7 +73,7 @@ namespace AngularP.Controllers
         {
             if (role == Role.Admin)
                 return false;
-            if (Accounts.Any(a => a.Email == email))
+            if (repository.Contains(email))
                 return false;
 
             var account = new Account()
@@ -86,15 +82,14 @@ namespace AngularP.Controllers
                 Password = password,
                 Role = role
             };
-            Accounts.Add(account);
+            repository.Add(account);
 
             return true;
         }
 
         private Account AuthenticateUser(string email, string password)
         {
-            return Accounts
-                .SingleOrDefault(u => u.Email == email && u.Password == password);
+            return repository.Get(email, password);
         }
 
         private string GenerateJWT(Account user)
@@ -107,10 +102,9 @@ namespace AngularP.Controllers
             var claims = new List<Claim>()
             {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString())
+                new Claim("id", user.Id.ToString()),
+                new Claim("role", user.Role.ToString())
             };
-
-            claims.Add(new Claim("role", user.Role.ToString()));
 
             var token = new JwtSecurityToken(authParams.Issuer, authParams.Audience, claims, 
                 expires: DateTime.Now.AddSeconds(authParams.TokenLifetime), 

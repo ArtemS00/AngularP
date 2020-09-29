@@ -16,7 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { JwtModule } from '@auth0/angular-jwt';
 import { environment } from '../environments/environment.prod';
-import { AUTH_API_URL } from './app-injection-tokens';
+import { AUTH_API_URL, JOBS_API_URL } from './app-injection-tokens';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -90,10 +90,13 @@ export function tokenGetter() {
       useClass: JwtInterceptor,
       multi: true
     },
-
     {
       provide: AUTH_API_URL,
       useValue: environment.authApi
+    },
+    {
+      provide: JOBS_API_URL,
+      useValue: environment.jobsApi
     }],
   bootstrap: [AppComponent]
 })

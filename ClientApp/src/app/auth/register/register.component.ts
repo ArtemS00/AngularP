@@ -11,7 +11,7 @@ import { AuthService } from '../../services/auth-service';
 })
 export class RegisterComponent {
   form: FormGroup;
-  email: FormControl = new FormControl('', [Validators.required, Validators.email]);
+  email: FormControl = new FormControl('', [Validators.required, Validators.email, Validators.minLength(5), Validators.maxLength(50)]);
   password: FormControl = new FormControl('', [Validators.required, Validators.minLength(8), Validators.maxLength(128), Validators.pattern('^[a-zA-Z0-9]*$')]);
   confirmPassword: FormControl = new FormControl('');
   role: FormControl = new FormControl('', [Validators.required]);
@@ -46,6 +46,15 @@ export class RegisterComponent {
   getEmailError() {
     if (this.email.hasError('required')) {
       return 'You must enter a value';
+    }
+    if (this.email.hasError('unique')) {
+      return 'This email is already used';
+    }
+    if (this.email.hasError('minlength')) {
+      return 'Not a valid email. Use 5 or more characters.';
+    }
+    if (this.email.hasError('maxlength')) {
+      return 'Not a valid email. Use 50 or less characters.';
     }
     return this.email.hasError('email') ? 'Not a valid email' : '';
   }
@@ -95,6 +104,8 @@ export class RegisterComponent {
         this.buttonDisabled = false;
       },
       error => {
+        if (error.status == 401)
+          this.email.setErrors({ unique: true });
         this.buttonDisabled = false;
       });
   }

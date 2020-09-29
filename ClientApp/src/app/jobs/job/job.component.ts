@@ -22,11 +22,15 @@ export class JobComponent {
     router: Router)
   {
     let id = route.snapshot.params['id'];
-    this.job = jobService.get(id);
-    if (!this.job) {
-      router.navigate(['']);
-    }
-    this.jobTypeDesc = Job.getJobTypeDescription(this.job.jobType);
+    jobService.get(id).subscribe(result => {
+      this.job = result;
+      if (!this.job)
+        router.navigate(['']);
+      this.jobTypeDesc = Job.getJobTypeDescription(this.job.jobType);
+    },
+      error => {
+        router.navigate(['']);
+      })
   }
 
   apply() {

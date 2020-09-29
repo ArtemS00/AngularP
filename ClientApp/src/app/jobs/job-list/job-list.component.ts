@@ -49,9 +49,13 @@ export class JobListComponent {
   pageSizeOptions: number[] = [5, 10, 25, 100];
 
   constructor(private jobService: JobService) {
-    this.jobs = this.jobService.getAll();
-    this.orignalJobs = this.jobs.copyWithin(this.jobs.length, 0);
-    this.loadJobs();
+    this.jobService.getAll().subscribe(result => {
+      this.jobs = result;
+      this.orignalJobs = this.jobs.copyWithin(this.jobs.length, 0);
+      this.loadJobs();
+    }, error => {
+        let a = error;
+    })
   }
 
   private pageEvent: PageEvent = { pageIndex: 0, pageSize: this.pageSize, length: this.length }

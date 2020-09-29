@@ -1,4 +1,4 @@
-<div class="mainBlock" style="min-width:900px; margin-bottom: 20px">
+<div class="mainBlock" style="min-width:900px; margin-bottom: 20px" *ngIf="jobs">
   <app-search [options]="searchOptions" (search)="search()"></app-search>
   <app-dropdown-button [options]="datePostedOptions" (changed)="dropdownChanged()"></app-dropdown-button>
   <app-dropdown-button [options]="jobTypeOptions" (changed)="dropdownChanged()"></app-dropdown-button>
@@ -6,7 +6,7 @@
   <app-dropdown-button [options]="remoteOptions" (changed)="dropdownChanged()"></app-dropdown-button>
   <app-dropdown-slider [options]="salaryOptions" (changed)="dropdownChanged()"></app-dropdown-slider>
 </div>
-<div style="margin-left: 5%; width: 90%; min-width:900px;" *ngIf="jobs.length > 0">
+<div style="margin-left: 5%; width: 90%; min-width:900px;" *ngIf="jobs?.length > 0">
   <div class="row">
     <app-job-item *ngFor="let job of jobsForShow"
                   [job]="job"
