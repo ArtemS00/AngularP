@@ -36,7 +36,7 @@ export class Job {
   }
   
   getSalaryDescription(): string {
-    if (!this.salaryType)
+    if (this.salaryType == undefined)
       return null;
     if (!this.salaryMax && !this.salaryMin)
       return null;
@@ -106,11 +106,12 @@ export class Job {
 
   getDatePosted(): string {
     let difference = new Date().valueOf() - this.datePosted.valueOf();
-    let differenceInHours = difference / 3600000;
+    let offset = this.datePosted.getTimezoneOffset();
+    let differenceInHours = difference / 3600000 + offset / 60;
     if (differenceInHours < 1)
       return "Just posted";
     if (differenceInHours < 24)
-      return "Today";
+      return "Less than a day";
     let differenceInDays = differenceInHours / 24;
     if (differenceInDays < 2)
       return "1 day ago";

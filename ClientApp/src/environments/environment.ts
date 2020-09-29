@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  authApi: 'https://angularptest.azurewebsites.net/api/auth/',
-  jobsApi: 'https://angularptest.azurewebsites.net/api/jobs/'
+  authApi: 'https://angularp.azurewebsites.net/api/auth/',
+  jobsApi: 'https://angularp.azurewebsites.net/api/jobs/'
 };
 
 /*
