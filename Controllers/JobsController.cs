@@ -17,21 +17,18 @@ namespace AngularP.Controllers
             this.repository = repository;
         }
 
-        // GET: api/<controller>
         [HttpGet]
         public IEnumerable<Job> Get()
         {
             return repository.GetAll();
         }
 
-        // GET api/<controller>/5
         [HttpGet("{id}")]
         public Job Get(int id)
         {
             return repository.Get(id);
         }
 
-        // POST api/<controller>
         [HttpPost]
         [Authorize]
         public void Post([FromBody]PostJobModel value)
@@ -39,6 +36,7 @@ namespace AngularP.Controllers
             if (!ModelState.IsValid)
                 throw new ArgumentException("Job is not valid");
 
+            // Gets id claim
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var claim = claimsIdentity.FindFirst("id");
             if (claim == null)
